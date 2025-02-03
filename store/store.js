@@ -1,7 +1,10 @@
 import { create } from "zustand";
+import { data } from "../data/data"
 
 export const useStore = create((set) => ({
-  count: 0,
-  increment: () => set((state) => ({count: state.count + 1})),
-  decrement: () => set((state) => ({count: state.count - 1})),
+  random_map: {
+    boardView: require ('../assets/background/Mario-Party-Jamboree.jpg'),
+    boardIcon: require ('../assets/logo/Super_Mario_Party_Jamboree_Logo.png'),
+  },
+  randomMap: () => set((state) => ({random_map: data[Math.floor(Math.random() * data.length)]})),
 }));

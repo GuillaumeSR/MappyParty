@@ -1,14 +1,17 @@
-import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import { StyleSheet, Text, View, Pressable, ImageBackground, Image } from 'react-native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { useStore } from "./store/store";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [loaded, error] = useFonts({
-    'AOTFRegular': require('./assets/fonts/AOTFShinGoProRegular.otf'),
+    'AOTF': require('./assets/fonts/AOTFShinGoProHeavy.otf'),
   });
+
+  const { random_map, randomMap } = useStore();
 
   useEffect(() => {
     if (loaded || error) {
@@ -21,17 +24,26 @@ export default function App() {
   }
 
   return (
-    <ImageBackground source={require ('./assets/board-view/super-mario-party-jamboree-website-board-1.jpg')}
+    <ImageBackground source={require ('./assets/background/Mario-Party-S-Background.jpg')}
     resizeMode="cover" style={styles.image}>
       <View style={styles.container}>
-        <Image style={styles.logo} source={require ('./assets/logo/Super_Mario_Party_Jamboree_Logo.png')}/>
+        <Image style={styles.logo} source={random_map.boardIcon}/>
       </View>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>
-              Choisir une carte
-            </Text>
-        </TouchableOpacity>
+        <Pressable
+          onPress={() => {
+            randomMap()
+          }}
+          style={({pressed}) => [
+            {
+              backgroundColor: pressed ? '#e2b327' : '#fdfdfd',
+            },
+            styles.button,
+        ]}>
+          {({pressed}) => (
+            <Text style={[{borderColor: pressed ? '#fdfdfd' : '#473a5b'}, {color: pressed ? '#fdfdfd' : '#473a5b'}, styles.buttonText]}>{pressed ? 'Choix de la carte' : 'Choisir une carte'}</Text>
+          )}
+        </Pressable>
       </View>
     </ImageBackground>
   );
@@ -44,22 +56,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    backgroundColor: 'red',
-    paddingHorizontal: 25,
-    paddingVertical: 15,
-    borderRadius: 10,
-    marginBottom: 20,
+    paddingHorizontal: 2,
+    paddingVertical: 2,
+    borderRadius: 25,
+    marginBottom: 30,
   },
   buttonText: {
-    color: 'white',
-    fontFamily: 'AOTFRegular',
+    fontFamily: 'AOTF',
+    borderWidth: 2,
+    paddingHorizontal: 25,
+    paddingVertical: 15,
+    borderRadius: 25,
   },
   image: {
     flex: 1,
     justifyContent: 'center',
   },
   logo: {
-    width: 186,
-    height: 150,
+    flex: 1,
+    marginTop: 100,
   },
 });
