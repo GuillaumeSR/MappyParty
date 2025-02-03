@@ -1,20 +1,65 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [loaded, error] = useFonts({
+    'AOTFRegular': require('./assets/fonts/AOTFShinGoProRegular.otf'),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ImageBackground source={require ('./assets/board-view/super-mario-party-jamboree-website-board-1.jpg')}
+    resizeMode="cover" style={styles.image}>
+      <View style={styles.container}>
+        <Image style={styles.logo} source={require ('./assets/logo/Super_Mario_Party_Jamboree_Logo.png')}/>
+      </View>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>
+              Choisir une carte
+            </Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  button: {
+    backgroundColor: 'red',
+    paddingHorizontal: 25,
+    paddingVertical: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontFamily: 'AOTFRegular',
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  logo: {
+    width: 186,
+    height: 150,
   },
 });
